@@ -38,6 +38,19 @@ encrypt:
 	PUTS            	;output the string at START
 	BR close
 
+readString:  
+    LEA r2, stringSize  ; Saves the address of stringSize into r2 
+    LD r1, stringLoop ; Loads the number 20 in register 1
+  loop:
+      in ; Gets and prints out each characer
+      STR r0, r2, #0 ;Saves the value of the input(r0) in memory.
+      ADD r2, r2, #1 ; adds one to the memory address in r2
+      ADD r1, r1, #-1 ; counts down the loop
+  BRp loop ; Breaks the loop if zero
+    LEA r0, stringSize ; saves the string locaiton in r0
+    PUTS ; prints out the characters
+BR close 
+
 close:
 	HALT
 
@@ -52,5 +65,9 @@ neg69:  .fill	#-69  ; Constant for the inverse of 'E'.
 neg68:  .fill	#-68  ; Constant for the inverse of' D'.
 
 array:  .blkw	20    ; Array of size 20.
+
+; **** readString *****
+stringLoop:   .FILL 20 ; Sets the maximum character fill limit to be 20 characters
+stringSize:   .blkw 20 ; Saves a memoery size of 20.
 
 .END
