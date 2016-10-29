@@ -70,4 +70,52 @@ array:  .blkw	20    ; Array of size 20.
 stringLoop:   .FILL 20 ; Sets the maximum character fill limit to be 20 characters
 stringSize:   .blkw 20 ; Saves a memoery size of 20.
 
+
+Letters:
+  LD r1, capitalLetterBottom ; fill register r1 with letter A
+  LD r2, capitalLetterTop ; fill register r2 with letter Z
+  IN ; loads in letter and outputs it.
+  NOT r3, r0 ; Gives one compliment of r0 stores in r3
+  ADD r3, r3, #1 ; ADDS one to make the number negitive
+  ADD r1, r3, r1 ; adds value of r3 (negitive r0) to r1 and stores in r1
+  BRn CapitalTop ; br if value of letter greater than A
+  BRz SuccessInput ; br if value is equal to A
+  BR FailedInput ; If it was a value less than A output Failed message 
+  
+CapitalTop:
+    ADD r2, r3, r2 ; adds negitive value of r3 (not r0) to r2 and stores in r2
+    BRzp SuccessInput ; the letter is Z
+    
+LowerCaseLetter:
+  LD r1, lowerCaseBottom ; fill register r1 with Letter a
+  LD r2, lowerCaseTop ; fill register r2 with Letter z
+  ADD r1, r3, r1 ; adds value of r3 (negitive r0) to r1 and stores in r1
+  BRn lowerTop ; br if value of letter greater than A
+  BRz SuccessInput ; br if value is equal to A
+  BR FailedInput ; If it was a value less than A output Failed message
+
+lowerTop:
+ADD r2, r3, r2 ; adds negitive value of r3 (not r0) to r2 and stores in r2
+BRzp SuccessInput ; the letter is Z
+BR FailedInput
+
+SuccessInput:
+  OUT
+  LEA r0, successmsg ; loads failure message
+  PUTS
+  HALT
+FailedInput:
+  OUT
+  LEA r0, failuremsg ; loads failure message
+  PUTS
+  HALT
+
+successmsg:       .STRINGZ "YOU input WAS a valid letter!"
+failuremsg:       .STRINGZ "Your input was not a valid letter."     
+capitalLetterBottom:  .FILL x0041 ; Letter A
+capitalLetterTop:   .FILL x005A ; Letter Z
+lowerCaseBottom:    .FILL x0061 ; Letter a
+lowerCaseTop:     .FILL x007A ; Letter z
+
+
 .END
