@@ -21,6 +21,6 @@ More info can be found in the lc3tools readme:
 
 ## Compile and run the caser.asm file.
 
-    cd ceaser-cipher-lc-3/
+    cd ~/ceaser-cipher-lc-3/
     rm ceaser.obj ; ~/lc3tools/lc3as ceaser.asm && ~/lc3tools/lc3sim ceaser.obj
 
