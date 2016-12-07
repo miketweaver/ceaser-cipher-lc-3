@@ -52,9 +52,11 @@ AND R1, R1, #0    ; clear r1 with 0;
 
 LEA R0, enterMessage   ;load the address of the label START into R0
 PUTS            ;output the string at START
-loop:
+
  ;Get Character and save in R3
-  ;GETC            ; input character -> r0
+ ;GETC            ; input character -> r0
+loop:
+BR Letters:
 
 Letters:
   LD r2, capitalLetterBottom ; fill register r1 with letter A
@@ -62,33 +64,54 @@ Letters:
   GETC ; loads in letter R0 and outputs it.
   NOT r3, r0 ; Gives one compliment of r0 stores in r3
   ADD r3, r3, #1 ; ADDS one to make the number negitive
-  ADD r2, r3, r2 ; adds value of r3 (negitive r0) to r1 and stores in r1
+  ADD r2, r3, r2 ; adds value of r3 (negitive r0) to r2 and stores in r2
   BRn CapitalTop ; br if value of letter greater than A
-  BRz SuccessInput ; br if value is equal to A
+  BRz SuccessInputCapital ; br if value is equal to A
   BR FailedInput ; If it was a value less than A output Failed message 
   
 CapitalTop:
-    ADD r6, r3, r6 ; adds negitive value of r3 (not r0) to r2 and stores in r2
-    BRzp SuccessInput ; the letter is Z
-    
+    ADD r6, r3, r6 ; adds negitive value of r3 (not r0) to r2 and stores in r6
+    BRzp SuccessInputCapital ; the letter is Z
+
+
 LowerCaseLetter:
   LD r2, lowerCaseBottom ; fill register r1 with Letter a
   LD r6, lowerCaseTop ; fill register r2 with Letter z
   ADD r2, r3, r2 ; adds value of r3 (negitive r0) to r1 and stores in r1
   BRn lowerTop ; br if value of letter greater than A
-  BRz SuccessInput ; br if value is equal to A
+  BRz SuccessInputLower ; br if value is equal to A
   BR FailedInput ; If it was a value less than A output Failed message
 
 lowerTop:
-ADD r6, r3, r6 ; adds negitive value of r3 (not r0) to r2 and stores in r2
-BRzp SuccessInput ; the letter is Z
+ADD r6, r3, r6 ; adds negitive value of r3 (not r0) to r6 and stores in r6
+BRzp SuccessInputLower ; the letter is Z
 BR FailedInput
 
 FailedInput:
   BR endLoop ;
 
+SuccessInputLower:
+  LEA r6 caseBottom ; loads r6 with address of caseBottom
+  LD r2 lowerCaseBottom ; loads r2 with capitalLetterBottom
+  STR r2, r6, #0 ; stores value of r2 into memory location of r6
+  LEA r6 caseTop
+  LD r2 lowerCaseTop 
+  STR r2, r6, #0
+  BR SuccessInput ; branches to manage input
+
+SuccessInputCapital:
+  LEA r6 caseBottom ; loads r6 with address of caseBottom
+  LD r2 capitalLetterBottom ; loads r2 with capitalLetterBottom
+  STR r2, r6, #0 ; stores value of r2 into memory location of r6
+  LEA r6 caseTop
+  LD r2 capitalLetterTop 
+  STR r2, r6, #0
+  BR SuccessInput ; branches to manage input
+
 START       .STRINGZ  "Welcome to the Ceaser Cipher Program\n"
 INVALID     .STRINGZ  "You have input an invalid answer.\n"
+caseBottom:    .FILL x0061 ; Letter a
+caseTop:     .FILL x007A ; Letter z
 capitalLetterBottom:  .FILL x0041 ; Letter A
 capitalLetterTop:   .FILL x005A ; Letter Z
 lowerCaseBottom:    .FILL x0061 ; Letter a
@@ -119,7 +142,7 @@ SuccessInput:
 
 ;begin keying
   ; load z into r0
-  lea r6, lowerCaseTop  ; Load address of key into R6.
+  lea r6, caseTop  ; Load address of key into R6.
   ldr r6, r6, #0        ; Load contents of key into R6.
   ; make r6 negative: -("z")
   NOT R6, R6            ; Gives one compliment of the "z" stores in r6
@@ -148,7 +171,7 @@ Overflow:
   NOT r0, r3; Gives one compliment of the "z" stores in r0
   ADD r0, r0, #1 ; ADDS one to make the number negitive
   ; load lowerCaseTop to r6p
-  lea r6, lowerCaseTop  ; Load address of key into R6.
+  lea r6, caseTop  ; Load address of key into R6.
   ldr r6, r6, #0        ; Load contents of key into R6.
   ; k = k - (lowerCaseTop+1-C)
   ADD r6, r6, #1 ; lowerCaseTop +1
@@ -161,7 +184,7 @@ Overflow:
 
   ; c = bottom.
   ; load lowerCaseBottom to r6p
-  lea r6, lowerCaseBottom  ; Load address of key into R3.
+  lea r6, caseBottom  ; Load address of key into R3.
   ldr r3, r6, #0        ; Load contents of key into R3.
 
   BR save ;
