@@ -56,7 +56,7 @@ PUTS            ;output the string at START
  ;Get Character and save in R3
  ;GETC            ; input character -> r0
 loop:
-BR Letters:
+BR Letters
 
 Letters:
   LD r2, capitalLetterBottom ; fill register r1 with letter A
@@ -91,20 +91,20 @@ FailedInput:
   BR endLoop ;
 
 SuccessInputLower:
-  LEA r6 caseBottom ; loads r6 with address of caseBottom
-  LD r2 lowerCaseBottom ; loads r2 with capitalLetterBottom
+  LEA r6, caseBottom ; loads r6 with address of caseBottom
+  LD r2, lowerCaseBottom ; loads r2 with capitalLetterBottom
   STR r2, r6, #0 ; stores value of r2 into memory location of r6
-  LEA r6 caseTop
-  LD r2 lowerCaseTop 
+  LEA r6, caseTop
+  LD r2, lowerCaseTop 
   STR r2, r6, #0
   BR SuccessInput ; branches to manage input
 
 SuccessInputCapital:
-  LEA r6 caseBottom ; loads r6 with address of caseBottom
-  LD r2 capitalLetterBottom ; loads r2 with capitalLetterBottom
+  LEA r6, caseBottom ; loads r6 with address of caseBottom
+  LD r2, capitalLetterBottom ; loads r2 with capitalLetterBottom
   STR r2, r6, #0 ; stores value of r2 into memory location of r6
-  LEA r6 caseTop
-  LD r2 capitalLetterTop 
+  LEA r6, caseTop
+  LD r2, capitalLetterTop 
   STR r2, r6, #0
   BR SuccessInput ; branches to manage input
 
