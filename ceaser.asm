@@ -1,5 +1,5 @@
 .ORIG x3000
-;
+
 
 ENCRYPTTYPE   .STRINGZ  "Would you like to encode? or decode? E or D?\n"
 ENCRYPTmsg    .STRINGZ  "Nice. made it te ENCRYPT.\n"
